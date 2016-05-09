@@ -18,7 +18,8 @@ public class Character {
 	private int orderNum;
 	private Color color;
 	public boolean inNet;
-	private ArrayList<Character> Links;
+	//private ArrayList<Character> Links;
+	private ArrayList<Pair<Character,Integer>> LinkArr;
 	private final int width = 40;
 	private final int spacing = 15;
 	private final int margex = 30;
@@ -26,7 +27,8 @@ public class Character {
 	public boolean clicked;
 	
 	public Character(MainApplet parent, String name, String color, int orderNum){
-		this.Links = new ArrayList<Character>();
+		//this.Links = new ArrayList<Character>();
+		this.LinkArr = new ArrayList<Pair<Character,Integer>>();
 		this.parent = parent;
 		this.name = name;
 		this.orderNum = orderNum;
@@ -55,9 +57,11 @@ public class Character {
 	
 	public String getName(){ return this.getName(); }
 	
-	public void addLink(Character Link ){ this.Links.add(Link); }
+	//public void addLink(Character Link ){ this.Links.add(Link); }
+	public void addLink(Character link, int val){ this.LinkArr.add(new Pair(link,val)); }
 	
-	public ArrayList<Character> getLinks(){ return this.Links; }
+	//public ArrayList<Character> getLinks(){ return this.Links; }
+	public ArrayList<Pair<Character,Integer>> getLinks(){ return this.LinkArr;}
 	
 	public boolean inCharacterLimits(){
 		if( parent.mouseX > this.x - this.width/2 && this.parent.mouseX < this.x + this.width/2

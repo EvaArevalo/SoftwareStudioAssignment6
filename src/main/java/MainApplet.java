@@ -80,23 +80,17 @@ public class MainApplet extends PApplet{
 		//Draw links and characters
 		for(Character character: this.characters){
 			if(character.inNet){
-				for(Character link: character.getLinks()){
+				for(int i=0; i<character.getLinks().size(); i++){
+					Character link = character.getLinks().get(i).getLeft();
 					if (link.inNet){
 						stroke(186,255,115);
-						strokeWeight(2);
+						strokeWeight(character.getLinks().get(i).getRight());
 						noFill();
 						//line(character.getX(), character.getY(), link.getX(), link.getY());
 						//control point: 650, 300 > ellipse origin
-						if(character.getX()>650)
-							curve(starNet.centerX,starNet.centerY,
-								character.getX(),character.getY(),link.getX(), link.getY(), 
-								starNet.centerX,starNet.centerY);
-
-						else
-							curve(starNet.centerX,starNet.centerY,
-									character.getX(),character.getY(),link.getX(), link.getY(), 
-									starNet.centerX,starNet.centerY);
-
+						curve(starNet.centerX,starNet.centerY,
+							character.getX(),character.getY(),link.getX(), link.getY(), 
+							starNet.centerX,starNet.centerY);
 					}
 				}
 			}
@@ -126,7 +120,7 @@ public class MainApplet extends PApplet{
 		
 		for(int i=0; i<links.size(); i++){
 			JSONObject link = links.getJSONObject(i);
-			characters.get(link.getInt("source")).addLink(characters.get(link.getInt("target")));
+			characters.get(link.getInt("source")).addLink(characters.get(link.getInt("target")),link.getInt("value"));
 		}
 	}
 	
