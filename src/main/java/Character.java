@@ -31,8 +31,8 @@ public class Character {
 		//parse hexadecimal to int to create color, remove alpha
 		this.color = new Color((int) (Long.decode(color)+4278190080L));
 		this.Links = new ArrayList<Character>();
-		this.initX = (this.width + spacing) * (orderNum % 4) + margex;
-		this.initY = (this.width + spacing) * (orderNum / 4) + margey;
+		this.initX = (this.width + spacing) * (orderNum / 10) + margex;
+		this.initY = (this.width + spacing) * (orderNum % 10) + margey;
 		this.x = initX;
 		this.y = initY;
 		//set default x and y according to order num 
@@ -59,25 +59,31 @@ public class Character {
 	
 	public ArrayList<Character> getLinks(){ return this.Links; }
 	
+	public boolean inCharacterLimits(){
+		if( parent.mouseX > this.x - this.width/2 && this.parent.mouseX < this.x + this.width/2
+				&& parent.mouseY > this.y - this.width/2 && this.parent.mouseY < this.y + this.width/2 )
+			return true;
+		else return false;
+	}
+	
 	public void display(){
 		this.parent.noStroke();
 		this.parent.fill(this.color.getRed(),this.color.getGreen(), this.color.getBlue());
 		this.parent.ellipse(this.x,this.y,this.width,this.width);
 		
-		if( parent.mouseX > this.x - this.width && this.parent.mouseX < this.x + this.width
-				&& parent.mouseY > this.y - this.width && this.parent.mouseY < this.y + this.width ){
-				this.hover = true;
+		if(inCharacterLimits()){
+			this.hover = true;
 
-				this.parent.noStroke();
-				this.parent.fill(230);
-				this.parent.rect(this.x, this.y, this.name.length()*10 + 30, 20, 18);
-				
-				this.parent.textSize(16);
-				this.parent.fill(this.color.getRed(),this.color.getGreen(), this.color.getBlue());
-				this.parent.text(this.name, this.x + 15, this.y + 15);;
+			this.parent.labelLayer.noStroke();
+			this.parent.labelLayer.fill(230);
+			this.parent.labelLayer.rect(parent.mouseX, parent.mouseY, this.name.length()*10 + 30, 20, 18);
+			
+			this.parent.labelLayer.textSize(16);
+			this.parent.labelLayer.fill(this.color.getRed(),this.color.getGreen(), this.color.getBlue());
+			this.parent.labelLayer.text(this.name, parent.mouseX +15, parent.mouseY+15);
 		}
 		else{
-			this.hover = false;	
+			this.hover = false;
 		}
 
 	}

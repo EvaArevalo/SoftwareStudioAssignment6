@@ -17,18 +17,23 @@ public class MainApplet extends PApplet{
 	
 	//Path in Eva's computer
 	private String path = "C:/Users/user/Documents/SoftwareStudioAssignment6/src/main/resources/";
+	//Path 
 	//private String path = "main/resources/";
 	private String file = "starwars-episode-1-interactions.json";
 	private String title = "Star Wars  1";
 	JSONObject data;
 	JSONArray nodes, links;
 	private ArrayList<Character> characters;
+	public PGraphics labelLayer;
 	
 	private final static int width = 1200, height = 650;
 	
 	public void setup() {
 		size(width, height);
+		labelLayer = createGraphics(width,height);
 		smooth();
+		labelLayer.smooth();
+		
 		characters = new ArrayList<Character>();
 		loadData();
 	}
@@ -39,9 +44,17 @@ public class MainApplet extends PApplet{
 		this.fill(0,0,0);
 		text(this.title,(1200-title.length()*15)/2,50);
 		
+		labelLayer.clear();
+		
 		for(Character character: this.characters)
 			character.display();
-
+		
+		labelLayer.beginDraw();
+		labelLayer.noFill();
+		labelLayer.noStroke();
+		labelLayer.endDraw();	
+		image(labelLayer,0,0);
+			
 	}
 	
 	public void keyPressed(){
@@ -65,5 +78,6 @@ public class MainApplet extends PApplet{
 			characters.get(link.getInt("source")).addLink(characters.get(link.getInt("target")));
 		}
 	}
+	
 
 }
