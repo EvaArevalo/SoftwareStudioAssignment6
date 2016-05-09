@@ -17,6 +17,7 @@ public class Character {
 	private String name;
 	private int orderNum;
 	private Color color;
+	private boolean inNet;
 	private ArrayList<Character> Links;
 	private final int width = 40;
 	private final int spacing = 15;
@@ -52,7 +53,7 @@ public class Character {
 	
 	public String getName(){ return this.getName(); }
 	
-	public void addLink(Character Link){ this.Links.add(Link); }
+	public void addLink(Character Link ){ this.Links.add(Link); }
 	
 	public ArrayList<Character> getLinks(){ return this.Links; }
 	
@@ -101,10 +102,18 @@ public class Character {
 		distance = (int) (Math.pow(coordx, 2) + Math.pow(coordy, 2));
 		
 		if( Math.sqrt(distance) <= 250 )
-			return true;
+			inNet = true;
 		
-		else return false;
+		return inNet;
 			
+	}
+	
+	public void forceInNet(){
+		inNet = true;
+	}
+	
+	public void forceOutNet(){
+		inNet = false;
 	}
 	
 }

@@ -32,24 +32,27 @@ public class Network {
 		this.parent.strokeWeight(weight);
 		this.parent.ellipse(centerX, centerY, radius*2, radius*2);
 		
-	/*	for(int i=0; i < CharsInNet.size(); i++){
+		for(int i=0; i < CharsInNet.size(); i++){
 			CharsInNet.get(i).setX( (int) (centerX + radius * Math.cos(2*Math.PI*i/CharsInNet.size())) );
 			CharsInNet.get(i).setY( (int) (centerY + radius * Math.sin(2*Math.PI*i/CharsInNet.size())) );
-		}*/
+		}
 	}
 	
 	public void addToNet(Character c){
+		for(Character character:CharsInNet){
+			if(character.equals(c)){
+				return;
+			}
+		}
 		CharsInNet.add(c);
 	}
 	
-	public void popNet (Character c){
-		//for(Character character:CharsInNet){
-			//if(character.equals(c)){
-			//	CharsInNet.remove
-			//}
-		//}
-		CharsInNet.remove(c);
-		display();
+	public void removeFromNet(Character c){
+		for(Character character:CharsInNet){
+			if(character.equals(c)){
+				CharsInNet.remove(character);
+			}
+		}
 	}
 	
 	public void setWeight(int x){
@@ -60,4 +63,7 @@ public class Network {
 		return this.weight;
 	}
 	
+	public int size(){
+		return this.CharsInNet.size();
+	}
 }

@@ -32,6 +32,7 @@ public class MainApplet extends PApplet{
 	
 	public void setup() {
 		size(width, height);
+		//label layers has names of characters, ensures they're on foreground
 		labelLayer = createGraphics(width,height);
 		smooth();
 		labelLayer.smooth();
@@ -45,12 +46,38 @@ public class MainApplet extends PApplet{
 		background(255);
 		this.textSize(36);
 		this.fill(0,0,0);
-		text(this.title,(1200-title.length()*15)/2,50);
+		text(this.title,(1200-title.length()*15)/2 + 50,50);
+		
+		//Add All Button
+		noStroke();
+		fill(102,204,0);
+		if(checkAddAllLimits())
+			rect(995,95,160,60,18);
+		else
+			rect(1000, 100, 150, 50, 18);
+		textSize(24);
+		fill(255);
+		text("Add All", 1000 + 30, 100 + 33 );
+		
+		//ClearAllButton
+		noStroke();
+		fill(102,204,0);
+		if(checkClearAllLimits())
+			rect(995,195,160,60,18);
+		else
+			rect(1000, 200, 150, 50, 18);
+		textSize(24);
+		fill(255);
+		text("Clear All", 1000 + 28, 200 + 33 );
+		
+		textSize(36);
+		fill(102,204,0);
+		text(String.valueOf(starNet.size()), 640, 345 );
 		
 		labelLayer.clear();
-		
 		starNet.display();
 		
+		//Draw links and characters
 		for(Character character: this.characters){
 			if(character.inNetwork()){
 				for(Character link: character.getLinks()){
@@ -71,6 +98,7 @@ public class MainApplet extends PApplet{
 		for(Character character: this.characters)
 			character.display();
 		
+		//Label layer
 		labelLayer.beginDraw();
 		labelLayer.noFill();
 		labelLayer.noStroke();
@@ -79,7 +107,6 @@ public class MainApplet extends PApplet{
 			
 	}
 	
-
 	private void loadData(){
 		
 		data = loadJSONObject(path+file);
@@ -109,6 +136,12 @@ public class MainApplet extends PApplet{
 				lastPressChar = character;
 			}
 		}
+		if(checkAddAllLimits()){
+			addAll();
+		}
+		else if(checkClearAllLimits()){
+			clearAll();
+		}
 	}
 	
 	public void mouseDragged(){
@@ -125,7 +158,7 @@ public class MainApplet extends PApplet{
 			if (!character.inNetwork()){
 				character.setX(character.initX);
 				character.setY(character.initY);
-				starNet.popNet(character);
+				starNet.removeFromNet(character);
 			}
 			else if (character.inNetwork()){
 				starNet.addToNet(character);
@@ -147,5 +180,31 @@ public class MainApplet extends PApplet{
 		
 		else return false;
 			
+	}
+	
+	public void addAll(){
+		for(Character character:characters){
+			character.forceInNet();
+			starNet.addToNet(character);
+		}
+	}
+	
+	public void clearAll(){
+		for(Character character:characters){
+			character.forceOutNet();
+			starNet.removeFromNet(character);
+		}
+	}
+	
+	public boolean checkAddAllLimits(){
+		if(mouseX>1000 && mouseX<1000+150 && mouseY>100 && mouseY<100+50)
+			return true;
+		else return false;
+	}
+	
+	public boolean checkClearAllLimits(){
+		if(mouseX>1000 && mouseX<1000+150 && mouseY>200 && mouseY<200+50)
+			return true;
+		else return false;
 	}
 }
