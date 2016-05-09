@@ -33,8 +33,10 @@ public class Network {
 		this.parent.ellipse(centerX, centerY, radius*2, radius*2);
 		
 		for(int i=0; i < CharsInNet.size(); i++){
-			CharsInNet.get(i).setX( (int) (centerX + radius * Math.cos(2*Math.PI*i/CharsInNet.size())) );
-			CharsInNet.get(i).setY( (int) (centerY + radius * Math.sin(2*Math.PI*i/CharsInNet.size())) );
+			if(!CharsInNet.get(i).clicked){
+				CharsInNet.get(i).setX( (int) (centerX + radius * Math.cos(2*Math.PI*i/CharsInNet.size())) );
+				CharsInNet.get(i).setY( (int) (centerY + radius * Math.sin(2*Math.PI*i/CharsInNet.size())) );
+			}
 		}
 	}
 	
@@ -48,11 +50,8 @@ public class Network {
 	}
 	
 	public void removeFromNet(Character c){
-		for(Character character:CharsInNet){
-			if(character.equals(c)){
-				CharsInNet.remove(character);
-			}
-		}
+		c.forceOutNet();
+		CharsInNet.remove(c);
 	}
 	
 	public void setWeight(int x){

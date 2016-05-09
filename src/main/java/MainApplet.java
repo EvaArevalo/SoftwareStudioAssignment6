@@ -45,7 +45,7 @@ public class MainApplet extends PApplet{
 	public void draw() {
 		background(255);
 		this.textSize(36);
-		this.fill(0,0,0);
+		this.fill(186,255,115);
 		text(this.title,(1200-title.length()*15)/2 + 50,50);
 		
 		//Add All Button
@@ -79,9 +79,9 @@ public class MainApplet extends PApplet{
 		
 		//Draw links and characters
 		for(Character character: this.characters){
-			if(character.inNetwork()){
+			if(character.inNet){
 				for(Character link: character.getLinks()){
-					if (link.inNetwork()){
+					if (link.inNet){
 						stroke(186,255,115);
 						strokeWeight(2);
 						noFill();
@@ -104,7 +104,6 @@ public class MainApplet extends PApplet{
 		labelLayer.noStroke();
 		labelLayer.endDraw();	
 		image(labelLayer,0,0);
-			
 	}
 	
 	private void loadData(){
@@ -134,6 +133,7 @@ public class MainApplet extends PApplet{
 		for (Character character: this.characters){
 			if(character.inCharacterLimits()){
 				lastPressChar = character;
+				lastPressChar.clicked = true;
 			}
 		}
 		if(checkAddAllLimits()){
@@ -154,17 +154,20 @@ public class MainApplet extends PApplet{
 	}
 	
 	public void mouseReleased(){
-		for (Character character: this.characters){
-			if (!character.inNetwork()){
-				character.setX(character.initX);
-				character.setY(character.initY);
-				starNet.removeFromNet(character);
-			}
-			else if (character.inNetwork()){
-				starNet.addToNet(character);
-			}
+		if (!inNetwork(mouseX,mouseY) && !checkAddAllLimits()  && !checkClearAllLimits()){
+			lastPressChar.setX(lastPressChar.initX);
+			lastPressChar.setY(lastPressChar.initY);
+			starNet.removeFromNet(lastPressChar);
+			if (lastPressChar.inNet)
+				lastPressChar.forceOutNet();
+		}
+		else if (inNetwork(mouseX,mouseY) && !checkAddAllLimits() && !checkClearAllLimits() ){
+			starNet.addToNet(lastPressChar);
+			lastPressChar.forceInNet();
 		}
 		starNet.setWeight(6);
+		
+		lastPressChar.clicked = false;
 	}
 	
 	public boolean inNetwork(int x, int y){

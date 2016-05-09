@@ -17,12 +17,13 @@ public class Character {
 	private String name;
 	private int orderNum;
 	private Color color;
-	private boolean inNet;
+	public boolean inNet;
 	private ArrayList<Character> Links;
 	private final int width = 40;
 	private final int spacing = 15;
 	private final int margex = 30;
 	private final int margey = 100;
+	public boolean clicked;
 	
 	public Character(MainApplet parent, String name, String color, int orderNum){
 		this.Links = new ArrayList<Character>();
@@ -35,6 +36,7 @@ public class Character {
 		this.initY = (this.width + spacing) * (orderNum % 10) + margey;
 		this.x = initX;
 		this.y = initY;
+		this.clicked = false;
 	}
 	
 	public void setX(int x){ this.x = x; }
@@ -113,7 +115,9 @@ public class Character {
 	}
 	
 	public void forceOutNet(){
-		inNet = false;
+		this.inNet = false;
+		this.x = this.initX;
+		this.y = this.initY;
 	}
 	
 }
