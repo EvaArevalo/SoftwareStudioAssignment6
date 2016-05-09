@@ -25,6 +25,8 @@ public class MainApplet extends PApplet{
 	JSONArray nodes, links;
 	private ArrayList<Character> characters;
 	public PGraphics labelLayer;
+	private Character lastPressChar;
+	public Network starNet;
 	
 	private final static int width = 1200, height = 650;
 	
@@ -35,6 +37,7 @@ public class MainApplet extends PApplet{
 		labelLayer.smooth();
 		
 		characters = new ArrayList<Character>();
+		starNet = new Network(this);
 		loadData();
 	}
 
@@ -45,6 +48,25 @@ public class MainApplet extends PApplet{
 		text(this.title,(1200-title.length()*15)/2,50);
 		
 		labelLayer.clear();
+		
+		starNet.display();
+		
+		for(Character character: this.characters){
+			if(character.inNetwork()){
+				for(Character link: character.getLinks()){
+					if (link.inNetwork()){
+						stroke(186,255,115);
+						strokeWeight(2);
+						noFill();
+						//line(character.getX(), character.getY(), link.getX(), link.getY());
+						//control point: 650, 300 > ellipse origin
+						curve(starNet.centerX,starNet.centerY,
+								character.getX(),character.getY(),link.getX(), link.getY(), 
+								starNet.centerX,starNet.centerY);
+					}
+				}
+			}
+		}
 		
 		for(Character character: this.characters)
 			character.display();
@@ -57,10 +79,6 @@ public class MainApplet extends PApplet{
 			
 	}
 	
-	public void keyPressed(){
-		//if(keyCode==32)
-			//setup();
-	}
 
 	private void loadData(){
 		
@@ -79,5 +97,55 @@ public class MainApplet extends PApplet{
 		}
 	}
 	
-
+	public void keyPressed(){
+		//to change episodes
+		//if(keyCode==32)
+			//setup();
+	}
+	
+	public void mousePressed(){
+		for (Character character: this.characters){
+			if(character.inCharacterLimits()){
+				lastPressChar = character;
+			}
+		}
+	}
+	
+	public void mouseDragged(){
+		lastPressChar.setX(mouseX);
+		lastPressChar.setY(mouseY);
+		if(inNetwork(mouseX,mouseY))
+			starNet.setWeight(12);
+		else
+			starNet.setWeight(6);
+	}
+	
+	public void mouseReleased(){
+		for (Character character: this.characters){
+			if (!character.inNetwork()){
+				character.setX(character.initX);
+				character.setY(character.initY);
+				starNet.popNet(character);
+			}
+			else if (character.inNetwork()){
+				starNet.addToNet(character);
+			}
+		}
+		starNet.setWeight(6);
+	}
+	
+	public boolean inNetwork(int x, int y){
+		
+		int coordx,coordy,distance;
+		
+		coordx = Math.abs(x - 650);
+		coordy = Math.abs(y - 350);
+		distance = (int) (Math.pow(coordx, 2) + Math.pow(coordy, 2));
+		
+		if( Math.sqrt(distance) <= 250 )
+			return true;
+		
+		else return false;
+			
+	}
 }

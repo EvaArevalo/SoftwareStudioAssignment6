@@ -12,7 +12,8 @@ import processing.core.PApplet;
 public class Character {
 	
 	private MainApplet parent;
-	private int x, y, initX, initY;
+	private int x, y;
+	public int initX, initY;
 	private String name;
 	private int orderNum;
 	private Color color;
@@ -21,22 +22,18 @@ public class Character {
 	private final int spacing = 15;
 	private final int margex = 30;
 	private final int margey = 100;
-	private boolean hover = false;
-	private boolean locked = false;
 	
 	public Character(MainApplet parent, String name, String color, int orderNum){
+		this.Links = new ArrayList<Character>();
 		this.parent = parent;
 		this.name = name;
 		this.orderNum = orderNum;
 		//parse hexadecimal to int to create color, remove alpha
 		this.color = new Color((int) (Long.decode(color)+4278190080L));
-		this.Links = new ArrayList<Character>();
 		this.initX = (this.width + spacing) * (orderNum / 10) + margex;
 		this.initY = (this.width + spacing) * (orderNum % 10) + margey;
 		this.x = initX;
 		this.y = initY;
-		//set default x and y according to order num 
-		//i.e. z number of circles per row, this.x = z*(orderNum+spacing)
 	}
 	
 	public void setX(int x){ this.x = x; }
@@ -67,15 +64,17 @@ public class Character {
 	}
 	
 	public void display(){
-		this.parent.noStroke();
-		this.parent.fill(this.color.getRed(),this.color.getGreen(), this.color.getBlue());
-		this.parent.ellipse(this.x,this.y,this.width,this.width);
-		
-		if(inCharacterLimits()){
-			this.hover = true;
 
+		if(inCharacterLimits()){
+			this.parent.noStroke();
+			//if(inNetwork())
+				//this.parent.tint(255, 126);
+			this.parent.fill(this.color.getRed(),this.color.getGreen(), this.color.getBlue());
+			this.parent.ellipse(this.x,this.y,this.width+5,this.width+5);
+			
 			this.parent.labelLayer.noStroke();
 			this.parent.labelLayer.fill(230);
+			//this.parent.labelLayer.noTint();
 			this.parent.labelLayer.rect(parent.mouseX, parent.mouseY, this.name.length()*10 + 30, 20, 18);
 			
 			this.parent.labelLayer.textSize(16);
@@ -83,8 +82,29 @@ public class Character {
 			this.parent.labelLayer.text(this.name, parent.mouseX +15, parent.mouseY+15);
 		}
 		else{
-			this.hover = false;
+			this.parent.noStroke();
+			//if(inNetwork())
+			//	this.parent.tint(255, 126);
+			this.parent.fill(this.color.getRed(),this.color.getGreen(), this.color.getBlue());
+			this.parent.ellipse(this.x,this.y,this.width,this.width);
+			//this.parent.labelLayer.noTint();
 		}
-
+	
 	}
+	
+	public boolean inNetwork(){
+		
+		int coordx,coordy,distance;
+		
+		coordx = Math.abs(this.x - 650);
+		coordy = Math.abs(this.y - 350);
+		distance = (int) (Math.pow(coordx, 2) + Math.pow(coordy, 2));
+		
+		if( Math.sqrt(distance) <= 250 )
+			return true;
+		
+		else return false;
+			
+	}
+	
 }
