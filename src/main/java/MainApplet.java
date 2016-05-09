@@ -87,9 +87,16 @@ public class MainApplet extends PApplet{
 						noFill();
 						//line(character.getX(), character.getY(), link.getX(), link.getY());
 						//control point: 650, 300 > ellipse origin
-						curve(starNet.centerX,starNet.centerY,
+						if(character.getX()>650)
+							curve(starNet.centerX,starNet.centerY,
 								character.getX(),character.getY(),link.getX(), link.getY(), 
 								starNet.centerX,starNet.centerY);
+
+						else
+							curve(starNet.centerX,starNet.centerY,
+									character.getX(),character.getY(),link.getX(), link.getY(), 
+									starNet.centerX,starNet.centerY);
+
 					}
 				}
 			}
@@ -167,7 +174,8 @@ public class MainApplet extends PApplet{
 		}
 		starNet.setWeight(6);
 		
-		lastPressChar.clicked = false;
+		if (lastPressChar!=null)
+			lastPressChar.clicked = false;
 	}
 	
 	public boolean inNetwork(int x, int y){
