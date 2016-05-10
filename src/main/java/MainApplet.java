@@ -18,7 +18,7 @@ public class MainApplet extends PApplet{
 	//Path in Eva's computer
 	private String path = "C:/Users/user/Documents/SoftwareStudioAssignment6/src/main/resources/";
 	//Path 
-	//private String path = "main/resources/";
+	//private String path = "main/resources/"
 	private String file = "starwars-episode-1-interactions.json";
 	private String title = "Star Wars  1";
 	JSONObject data;
@@ -70,6 +70,22 @@ public class MainApplet extends PApplet{
 		fill(255);
 		text("Clear All", 1000 + 28, 200 + 33 );
 		
+		//ColorScale
+		this.fill(186,255,115);
+		textSize(22);
+		text("Density Scale", 1005,475);
+		textSize(10);
+		text("0", 1155,440);
+		text("10", 1155,390);
+		text("20", 1155,340);
+		text("25", 1155,320);
+		for(int i=26; i>0; i--){
+			Color scaleColor = decodeColor(i);
+			fill(scaleColor.getRed(),scaleColor.getGreen(),scaleColor.getBlue());
+			rect(1000,440-i*5,150,5);
+		}
+		
+		//StarNet number of characters in network
 		textSize(36);
 		fill(102,204,0);
 		text(String.valueOf(starNet.size()), 640, 345 );
@@ -83,8 +99,9 @@ public class MainApplet extends PApplet{
 				for(int i=0; i<character.getLinks().size(); i++){
 					Character link = character.getLinks().get(i).getLeft();
 					if (link.inNet){
-						stroke(186,255,115);
-						strokeWeight(character.getLinks().get(i).getRight());
+						Color strokeColor = decodeColor(character.getLinks().get(i).getRight());
+						stroke(strokeColor.getRed(),strokeColor.getGreen(),strokeColor.getBlue());
+						strokeWeight(character.getLinks().get(i).getRight()/2);
 						noFill();
 						//line(character.getX(), character.getY(), link.getX(), link.getY());
 						//control point: 650, 300 > ellipse origin
@@ -146,8 +163,12 @@ public class MainApplet extends PApplet{
 	}
 	
 	public void mouseDragged(){
-		lastPressChar.setX(mouseX);
-		lastPressChar.setY(mouseY);
+		if (lastPressChar!=null){
+			if(lastPressChar.clicked){
+				lastPressChar.setX(mouseX);
+				lastPressChar.setY(mouseY);
+			}
+		}
 		if(inNetwork(mouseX,mouseY))
 			starNet.setWeight(12);
 		else
@@ -156,15 +177,23 @@ public class MainApplet extends PApplet{
 	
 	public void mouseReleased(){
 		if (!inNetwork(mouseX,mouseY) && !checkAddAllLimits()  && !checkClearAllLimits()){
-			lastPressChar.setX(lastPressChar.initX);
-			lastPressChar.setY(lastPressChar.initY);
-			starNet.removeFromNet(lastPressChar);
-			if (lastPressChar.inNet)
-				lastPressChar.forceOutNet();
+			if (lastPressChar!=null){
+				if(lastPressChar.clicked){
+					lastPressChar.setX(lastPressChar.initX);
+					lastPressChar.setY(lastPressChar.initY);
+					starNet.removeFromNet(lastPressChar);
+					if (lastPressChar.inNet)
+						lastPressChar.forceOutNet();
+				}
+			}
 		}
 		else if (inNetwork(mouseX,mouseY) && !checkAddAllLimits() && !checkClearAllLimits() ){
-			starNet.addToNet(lastPressChar);
-			lastPressChar.forceInNet();
+			if (lastPressChar!=null){
+				if(lastPressChar.clicked){
+					starNet.addToNet(lastPressChar);
+					lastPressChar.forceInNet();
+				}
+			}
 		}
 		starNet.setWeight(6);
 		
@@ -211,5 +240,92 @@ public class MainApplet extends PApplet{
 		if(mouseX>1000 && mouseX<1000+150 && mouseY>200 && mouseY<200+50)
 			return true;
 		else return false;
+	}
+	
+	public Color decodeColor(int i){
+		Color strokeColor;
+		switch(i){
+		case 1: 
+			strokeColor = new Color(0,0,128); ///navy
+			break;
+		case 2:
+			strokeColor = new Color(0,0,205); //dark blue
+			break;
+		case 3:
+			strokeColor = new Color(0,0,255); // blue
+			break;
+		case 4:
+			strokeColor = new Color(75,0,130); //indigo
+			break;
+		case 5:
+			strokeColor = new Color(139,0,139); //dark magenta
+			break;
+		case 6:
+			strokeColor = new Color(148,0,211); //dark violet
+			break;
+		case 7:
+			strokeColor = new Color(186,85,211); //medium orchid
+			break;
+		case 8:
+			strokeColor = new Color(255,105,180); //hot pink
+			break;
+		case 9:
+			strokeColor = new Color(250,128,114); // salmon
+			break;
+		case 10:
+			strokeColor = new Color(255,0,0); //red
+			break;
+		case 11:
+			strokeColor = new Color(220,20,60); //crimson
+			break;
+		case 12:
+			strokeColor = new Color(178,34,34); //firebrick
+			break;
+		case 13:
+			strokeColor = new Color(218,165,32); //golden rod
+			break;
+		case 14:
+			strokeColor = new Color(255,215,0); //gold
+			break;
+		case 15:
+			strokeColor = new Color(255,255,0); //yellow
+			break;
+		case 16:
+			strokeColor = new Color(173,255,47); //green yellow
+			break;
+		case 17:
+			strokeColor = new Color(154,205,50); //yellow green
+			break;
+		case 18:
+			strokeColor = new Color(124,252,0); //lawn
+			break;
+		case 19:
+			strokeColor = new Color(0,255,0); //lime
+			break;
+		case 20:
+			strokeColor = new Color(0,128,0); //green
+			break;
+		case 21:
+			strokeColor = new Color(0,100,0); //dark green
+			break;
+		case 22:
+			strokeColor = new Color(60,179,113); //medium sea green
+			break;
+		case 23:
+			strokeColor = new Color(32,178,170); //light sea green
+			break;
+		case 24:
+			strokeColor = new Color(72,209,204); //medium turquoise
+			break;
+		case 25:
+			strokeColor = new Color(127,255,212); //aquamarine
+			break;
+		case 26:
+			strokeColor = new Color(176,224,230); //powder blue
+			break;
+		default:
+			strokeColor = new Color(176,224,230); //powder blue
+		}
+		return strokeColor;
 	}
 }

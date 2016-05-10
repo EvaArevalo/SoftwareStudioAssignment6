@@ -75,7 +75,7 @@ public class Character {
 		if(inCharacterLimits()){
 			this.parent.noStroke();
 			//if(inNetwork())
-				//this.parent.tint(255, 126);
+				//this.parent.noTint();
 			this.parent.fill(this.color.getRed(),this.color.getGreen(), this.color.getBlue());
 			this.parent.ellipse(this.x,this.y,this.width+5,this.width+5);
 			
