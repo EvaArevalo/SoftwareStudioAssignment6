@@ -26,6 +26,7 @@ public class MainApplet extends PApplet{
 	private ArrayList<Character> characters;
 	public PGraphics labelLayer;
 	private Character lastPressChar;
+	private int last_key;
 	public Network starNet;
 	
 	private final static int width = 1200, height = 650;
@@ -141,10 +142,35 @@ public class MainApplet extends PApplet{
 		}
 	}
 	
-	public void keyPressed(){
-		//to change episodes
-		//if(keyCode==32)
-			//setup();
+	public void keyPressed() {
+		if (keyCode != last_key) {
+			if (keyCode == '1') {
+				title = "Star Wars  1";
+				file = "starwars-episode-1-interactions.json";
+			} else if (keyCode == '2') {
+				title = "Star Wars  2";
+				file = "starwars-episode-2-interactions.json";
+			} else if (keyCode == '3') {
+				title = "Star Wars  3";
+				file = "starwars-episode-3-interactions.json";
+			} else if (keyCode == '4') {
+				title = "Star Wars  4";
+				file = "starwars-episode-4-interactions.json";
+			} else if (keyCode == '5') {
+				title = "Star Wars  5";
+				file = "starwars-episode-5-interactions.json";
+			} else if (keyCode == '6') {
+				title = "Star Wars  6";
+				file = "starwars-episode-6-interactions.json";
+			} else if (keyCode == '7') {
+				title = "Star Wars  7";
+				file = "starwars-episode-7-interactions.json";
+			}
+			if (keyCode >= '1' && keyCode <= '7' && last_key != keyCode){
+				last_key = keyCode;
+				setup();
+			}
+		}
 	}
 	
 	public void mousePressed(){
@@ -223,8 +249,30 @@ public class MainApplet extends PApplet{
 		}
 	}
 	
-	public void clearAll(){
-		for(Character character:characters){
+	public void clearAll() {
+		for (Character character : characters) {
+			double[] vec = new double[2];
+			double[] src = new double[2];
+			vec[0] = (double)(character.initX - character.getX()) / 60.0;
+			vec[1] = (double)(character.initY - character.getY()) / 60.0;
+			src[0] = (double)character.getX();
+			src[1] = (double)character.getY();
+			Thread childThread = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					while(Math.abs(character.getX() - character.initX) > 3 || Math.abs(character.getY() - character.initY) > 3){
+						character.setX((int)Math.floor(src[0] += vec[0]));
+						character.setY((int)Math.floor(src[1] += vec[1]));
+						try {
+							Thread.sleep(16);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			});
+			childThread.start();
 			character.forceOutNet();
 			starNet.removeFromNet(character);
 		}

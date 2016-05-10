@@ -120,8 +120,8 @@ public class Character {
 	
 	public void forceOutNet(){
 		this.inNet = false;
-		this.x = this.initX;
-		this.y = this.initY;
+		//this.x = this.initX;
+		//this.y = this.initY;
 	}
 	
 }
