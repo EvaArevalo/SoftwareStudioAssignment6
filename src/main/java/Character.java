@@ -27,7 +27,6 @@ public class Character {
 	public boolean clicked;
 	
 	public Character(MainApplet parent, String name, String color, int orderNum){
-		//this.Links = new ArrayList<Character>();
 		this.LinkArr = new ArrayList<Pair<Character,Integer>>();
 		this.parent = parent;
 		this.name = name;
@@ -57,10 +56,8 @@ public class Character {
 	
 	public String getName(){ return this.getName(); }
 	
-	//public void addLink(Character Link ){ this.Links.add(Link); }
 	public void addLink(Character link, int val){ this.LinkArr.add(new Pair(link,val)); }
 	
-	//public ArrayList<Character> getLinks(){ return this.Links; }
 	public ArrayList<Pair<Character,Integer>> getLinks(){ return this.LinkArr;}
 	
 	public boolean inCharacterLimits(){
@@ -78,7 +75,6 @@ public class Character {
 				//this.parent.noTint();
 			this.parent.fill(this.color.getRed(),this.color.getGreen(), this.color.getBlue());
 			this.parent.ellipse(this.x,this.y,this.width+5,this.width+5);
-			
 			this.parent.labelLayer.noStroke();
 			this.parent.labelLayer.fill(230);
 			//this.parent.labelLayer.noTint();
@@ -120,8 +116,6 @@ public class Character {
 	
 	public void forceOutNet(){
 		this.inNet = false;
-		//this.x = this.initX;
-		//this.y = this.initY;
 	}
 	
 }

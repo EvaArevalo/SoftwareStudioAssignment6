@@ -18,7 +18,7 @@ public class MainApplet extends PApplet{
 	//Path in Eva's computer
 	private String path = "C:/Users/user/Documents/SoftwareStudioAssignment6/src/main/resources/";
 	//Path 
-	//private String path = "main/resources/"
+	//private String path = "main/resources/";
 	private String file = "starwars-episode-1-interactions.json";
 	private String title = "Star Wars  1";
 	JSONObject data;
